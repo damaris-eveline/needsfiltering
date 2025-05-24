@@ -1,29 +1,1390 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
+
+
 <head>
-    <title>Disease Data Explorer</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="styles.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Added a common sans-serif font */
+        }
+
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        .loading-dots:after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+
+
+        @keyframes dots {
+
+
+            0%,
+            20% {
+                content: '.';
+            }
+
+
+            40% {
+                content: '..';
+            }
+
+
+            60% {
+                content: '...';
+            }
+
+
+            80%,
+            100% {
+                content: '';
+            }
+        }
+
+
+        .result-card {
+            /* Kept for potential future use, though current display is simpler */
+            transition: all 0.3s ease;
+        }
+
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+
+        /* Ensure Inter font is loaded if not available system-wide */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    </style>
+    <style>
+        *,
+        ::before,
+        ::after {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+
+
+        ::backdrop {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+
+
+        /* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */
+        *,
+        ::after,
+        ::before {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb
+        }
+
+
+        ::after,
+        ::before {
+            --tw-content: ''
+        }
+
+
+        :host,
+        html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            -moz-tab-size: 4;
+            tab-size: 4;
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            -webkit-tap-highlight-color: transparent
+        }
+
+
+        body {
+            margin: 0;
+            line-height: inherit
+        }
+
+
+        hr {
+            height: 0;
+            color: inherit;
+            border-top-width: 1px
+        }
+
+
+        abbr:where([title]) {
+            -webkit-text-decoration: underline dotted;
+            text-decoration: underline dotted
+        }
+
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: inherit;
+            font-weight: inherit
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: inherit
+        }
+
+
+        b,
+        strong {
+            font-weight: bolder
+        }
+
+
+        code,
+        kbd,
+        pre,
+        samp {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            font-size: 1em
+        }
+
+
+        small {
+            font-size: 80%
+        }
+
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline
+        }
+
+
+        sub {
+            bottom: -.25em
+        }
+
+
+        sup {
+            top: -.5em
+        }
+
+
+        table {
+            text-indent: 0;
+            border-color: inherit;
+            border-collapse: collapse
+        }
+
+
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            font-family: inherit;
+            font-feature-settings: inherit;
+            font-variation-settings: inherit;
+            font-size: 100%;
+            font-weight: inherit;
+            line-height: inherit;
+            letter-spacing: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0
+        }
+
+
+        button,
+        select {
+            text-transform: none
+        }
+
+
+        button,
+        input:where([type=button]),
+        input:where([type=reset]),
+        input:where([type=submit]) {
+            -webkit-appearance: button;
+            background-color: transparent;
+            background-image: none
+        }
+
+
+        :-moz-focusring {
+            outline: auto
+        }
+
+
+        :-moz-ui-invalid {
+            box-shadow: none
+        }
+
+
+        progress {
+            vertical-align: baseline
+        }
+
+
+        ::-webkit-inner-spin-button,
+        ::-webkit-outer-spin-button {
+            height: auto
+        }
+
+
+        [type=search] {
+            -webkit-appearance: textfield;
+            outline-offset: -2px
+        }
+
+
+        ::-webkit-search-decoration {
+            -webkit-appearance: none
+        }
+
+
+        ::-webkit-file-upload-button {
+            -webkit-appearance: button;
+            font: inherit
+        }
+
+
+        summary {
+            display: list-item
+        }
+
+
+        blockquote,
+        dd,
+        dl,
+        figure,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        hr,
+        p,
+        pre {
+            margin: 0
+        }
+
+
+        fieldset {
+            margin: 0;
+            padding: 0
+        }
+
+
+        legend {
+            padding: 0
+        }
+
+
+        menu,
+        ol,
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0
+        }
+
+
+        dialog {
+            padding: 0
+        }
+
+
+        textarea {
+            resize: vertical
+        }
+
+
+        input::placeholder,
+        textarea::placeholder {
+            opacity: 1;
+            color: #9ca3af
+        }
+
+
+        [role=button],
+        button {
+            cursor: pointer
+        }
+
+
+        :disabled {
+            cursor: default
+        }
+
+
+        audio,
+        canvas,
+        embed,
+        iframe,
+        img,
+        object,
+        svg,
+        video {
+            display: block;
+            vertical-align: middle
+        }
+
+
+        img,
+        video {
+            max-width: 100%;
+            height: auto
+        }
+
+
+        [hidden]:where(:not([hidden=until-found])) {
+            display: none
+        }
+
+
+        .container {
+            width: 100%
+        }
+
+
+        @media (min-width: 640px) {
+            .container {
+                max-width: 640px
+            }
+        }
+
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 768px
+            }
+        }
+
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1024px
+            }
+        }
+
+
+        @media (min-width: 1280px) {
+            .container {
+                max-width: 1280px
+            }
+        }
+
+
+        @media (min-width: 1536px) {
+            .container {
+                max-width: 1536px
+            }
+        }
+
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto
+        }
+
+
+        .mb-1 {
+            margin-bottom: 0.25rem
+        }
+
+
+        .mb-10 {
+            margin-bottom: 2.5rem
+        }
+
+
+        .mb-2 {
+            margin-bottom: 0.5rem
+        }
+
+
+        .mb-3 {
+            margin-bottom: 0.75rem
+        }
+
+
+        .mb-4 {
+            margin-bottom: 1rem
+        }
+
+
+        .mb-6 {
+            margin-bottom: 1.5rem
+        }
+
+
+        .mb-8 {
+            margin-bottom: 2rem
+        }
+
+
+        .ml-1 {
+            margin-left: 0.25rem
+        }
+
+
+        .mr-1 {
+            margin-right: 0.25rem
+        }
+
+
+        .mr-2 {
+            margin-right: 0.5rem
+        }
+
+
+        .mr-3 {
+            margin-right: 0.75rem
+        }
+
+
+        .mt-1 {
+            margin-top: 0.25rem
+        }
+
+
+        .mt-2 {
+            margin-top: 0.5rem
+        }
+
+
+        .mt-4 {
+            margin-top: 1rem
+        }
+
+
+        .mt-8 {
+            margin-top: 2rem
+        }
+
+
+        .block {
+            display: block
+        }
+
+
+        .inline-block {
+            display: inline-block
+        }
+
+
+        .flex {
+            display: flex
+        }
+
+
+        .grid {
+            display: grid
+        }
+
+
+        .hidden {
+            display: none
+        }
+
+
+        .min-h-screen {
+            min-height: 100vh
+        }
+
+
+        .w-full {
+            width: 100%
+        }
+
+
+        .max-w-4xl {
+            max-width: 56rem
+        }
+
+
+        .flex-1 {
+            flex: 1 1 0%
+        }
+
+
+        .cursor-pointer {
+            cursor: pointer
+        }
+
+
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr))
+        }
+
+
+        .items-center {
+            align-items: center
+        }
+
+
+        .justify-between {
+            justify-content: space-between
+        }
+
+
+        .gap-4 {
+            gap: 1rem
+        }
+
+
+        .space-x-2> :not([hidden])~ :not([hidden]) {
+            --tw-space-x-reverse: 0;
+            margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+            margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))
+        }
+
+
+        .space-y-3> :not([hidden])~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(0.75rem * var(--tw-space-y-reverse))
+        }
+
+
+        .whitespace-pre-wrap {
+            white-space: pre-wrap
+        }
+
+
+        .rounded-full {
+            border-radius: 9999px
+        }
+
+
+        .rounded-lg {
+            border-radius: 0.5rem
+        }
+
+
+        .rounded-md {
+            border-radius: 0.375rem
+        }
+
+
+        .rounded-xl {
+            border-radius: 0.75rem
+        }
+
+
+        .border {
+            border-width: 1px
+        }
+
+
+        .border-l-4 {
+            border-left-width: 4px
+        }
+
+
+        .border-gray-200 {
+            --tw-border-opacity: 1;
+            border-color: rgb(229 231 235 / var(--tw-border-opacity, 1))
+        }
+
+
+        .border-gray-300 {
+            --tw-border-opacity: 1;
+            border-color: rgb(209 213 219 / var(--tw-border-opacity, 1))
+        }
+
+
+        .border-indigo-100 {
+            --tw-border-opacity: 1;
+            border-color: rgb(224 231 255 / var(--tw-border-opacity, 1))
+        }
+
+
+        .bg-gray-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1))
+        }
+
+
+        .bg-indigo-100 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(224 231 255 / var(--tw-bg-opacity, 1))
+        }
+
+
+        .bg-indigo-50 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(238 242 255 / var(--tw-bg-opacity, 1))
+        }
+
+
+        .bg-indigo-600 {
+            --tw-bg-opacity: 1;
+            background-color: rgb(136 70 229)!important;
+        }
+
+
+        .bg-white {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
+        }
+
+
+        .p-6 {
+            padding: 1.5rem
+        }
+
+
+        .px-3 {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem
+        }
+
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem
+        }
+
+
+        .px-6 {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem
+        }
+
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem
+        }
+
+
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem
+        }
+
+
+        .py-8 {
+            padding-top: 2rem;
+            padding-bottom: 2rem
+        }
+
+
+        .pl-2 {
+            padding-left: 0.5rem
+        }
+
+
+        .text-center {
+            text-align: center
+        }
+
+
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem
+        }
+
+
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem
+        }
+
+
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem
+        }
+
+
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem
+        }
+
+
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem
+        }
+
+
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem
+        }
+
+
+        .font-bold {
+            font-weight: 700
+        }
+
+
+        .font-medium {
+            font-weight: 500
+        }
+
+
+        .font-semibold {
+            font-weight: 600
+        }
+
+
+        .text-gray-500 {
+            --tw-text-opacity: 1;
+            color: rgb(107 114 128 / var(--tw-text-opacity, 1))
+        }
+
+
+        .text-gray-600 {
+            --tw-text-opacity: 1;
+            color: rgb(75 85 99 / var(--tw-text-opacity, 1))
+        }
+
+
+        .text-gray-700 {
+            --tw-text-opacity: 1;
+            color: rgb(55 65 81 / var(--tw-text-opacity, 1))
+        }
+
+
+        .text-gray-800 {
+            --tw-text-opacity: 1;
+            color: rgb(31 41 55 / var(--tw-text-opacity, 1))
+        }
+
+
+        .text-indigo-500 {
+            --tw-text-opacity: 1;
+            color: rgb(136 70 229)!important;
+        }
+
+
+        .text-indigo-600 {
+            --tw-text-opacity: 1;
+            color: rgb(136 70 229)!important;
+        }
+
+
+        .text-indigo-700 {
+            --tw-text-opacity: 1;
+            color: rgb(67 56 202 / var(--tw-text-opacity, 1))
+        }
+
+
+        .text-indigo-800 {
+            --tw-text-opacity: 1;
+            color: rgb(136 70 229)!important;
+        }
+
+
+        .text-red-500 {
+            --tw-text-opacity: 1;
+            color: rgb(239 68 68 / var(--tw-text-opacity, 1))
+        }
+
+
+        .text-white {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+        }
+
+
+        .shadow-lg {
+            --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+
+        .shadow-sm {
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+
+
+        .outline-none {
+            outline: 2px solid transparent;
+            outline-offset: 2px
+        }
+
+
+        .transition {
+            transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms
+        }
+
+
+        .transition-transform {
+            transition-property: transform;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms
+        }
+
+
+        .hover\:bg-indigo-200:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(199 210 254 / var(--tw-bg-opacity, 1))
+        }
+
+
+        .hover\:bg-indigo-700:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(67 56 202 / var(--tw-bg-opacity, 1))
+        }
+
+
+        .focus\:border-indigo-500:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(99 102 241 / var(--tw-border-opacity, 1))
+        }
+
+
+        .focus\:ring-2:focus {
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)
+        }
+
+
+        .focus\:ring-indigo-500:focus {
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity, 1))
+        }
+
+
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+        }
+    </style>
 </head>
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center">Disease Data Explorer</h1>
-        <div class="row mt-4">
-            <div class="col-md-6 offset-md-3">
-                <div class="input-group mb-3">
-                    <input type="text" id="diseaseInput" class="form-control" placeholder="Enter disease name">
-                    <button class="btn btn-primary" id="searchBtn">Search</button>
+
+
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">Disease Analytics</h1>
+            <p class="text-gray-600">Get incidence and market size data for any disease or health problem</p>
+        </header>
+
+
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div id="inputArea" class="mb-8">
+                <label for="diseaseInput" class="block text-lg font-medium text-gray-700 mb-2">
+                    <i class="fas fa-disease text-indigo-500 mr-2"></i> Enter Disease or Health Problem
+                </label>
+                <div class="flex space-x-2">
+                    <input type="text" id="diseaseInput" placeholder="e.g. Diabetes, Alzheimer's, Breast Cancer"
+                        class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                    <button id="searchButton"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition flex items-center">
+                        <i class="fas fa-search mr-2"></i> Analyze
+                    </button>
+                </div>
+                <div id="inputError" class="text-red-500 text-sm mt-1 hidden"></div>
+                <div class="mt-2 flex items-center text-sm text-gray-500">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    <span>Be as specific as possible for more accurate results</span>
+                </div>
+            </div>
+
+
+            <div id="advancedOptionsArea" class="mb-6">
+                <div class="flex items-center justify-between cursor-pointer" id="advancedToggle">
+                    <h3 class="text-md font-medium text-gray-700">
+                        <i class="fas fa-sliders-h text-indigo-500 mr-2"></i> Advanced Options
+                    </h3>
+                    <i class="fas fa-chevron-down text-gray-500 transition-transform" id="advancedArrow"></i>
+                </div>
+                <div id="advancedContent" class="hidden mt-4 pl-2 border-l-4 border-indigo-100">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Region (UI Only)</label>
+                            <select
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                <option>Global</option>
+                                <option>North America</option>
+                                <option>Europe</option>
+                                <option>Asia</option>
+                                <option>Latin America</option>
+                                <option>Middle East &amp; Africa</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Time Frame (UI Only)</label>
+                            <select
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                <option>Current</option>
+                                <option>5-year projection</option>
+                                <option>10-year projection</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="loadingState" class="hidden text-center py-8">
+                <div class="inline-block bg-indigo-50 p-6 rounded-full mb-4">
+                    <i class="fas fa-atom fa-spin text-indigo-600 text-3xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-700 mb-1">Analyzing <span id="loadingDiseaseName"
+                        class="font-semibold text-indigo-600"></span></h3>
+                <p class="text-gray-500 loading-dots">Please wait...</p>
+            </div>
+
+
+            <div id="resultsSection" class="hidden fade-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-chart-line text-indigo-500 mr-3"></i> Analysis Results for <span
+                        id="resultsDiseaseName" class="text-indigo-600 ml-1"></span>
+                </h2>
+
+
+                <div id="structuredResults"
+                    class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-3 mb-6">
+                </div>
+
+
+                <div id="rawResponseContainer" class="hidden bg-indigo-50 rounded-xl p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-indigo-800 mb-3 flex items-center">
+                        <i class="fas fa-lightbulb text-indigo-600 mr-2"></i> Full Response from LLM
+                    </h3>
+                    <pre id="rawResponseContent" class="text-gray-700 whitespace-pre-wrap text-sm"></pre>
+                </div>
+
+
+                <div class="mt-8 text-center">
+                    <button id="newSearchButton"
+                        class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 px-6 py-2 rounded-lg font-medium transition">
+                        <i class="fas fa-redo mr-2"></i> Analyze a New Disease
+                    </button>
                 </div>
             </div>
         </div>
-        
-        <div id="results" class="mt-4">
-            <!-- Results will appear here -->
-        </div>
     </div>
 
-    
 
-    <script src="script.js"></script>
+    <script>
+        // DOM Elements
+        const diseaseInput = document.getElementById('diseaseInput');
+        const searchButton = document.getElementById('searchButton');
+        const inputError = document.getElementById('inputError');
+
+
+        const inputArea = document.getElementById('inputArea');
+        const advancedOptionsArea = document.getElementById('advancedOptionsArea');
+
+
+        const loadingState = document.getElementById('loadingState');
+        const loadingDiseaseName = document.getElementById('loadingDiseaseName');
+
+
+        const resultsSection = document.getElementById('resultsSection');
+        const resultsDiseaseName = document.getElementById('resultsDiseaseName');
+        const structuredResultsDiv = document.getElementById('structuredResults');
+        const rawResponseContainer = document.getElementById('rawResponseContainer');
+        // const rawResponseContent = document.getElementById('rawResponseContent'); // Not strictly needed if container is always hidden
+
+
+        const newSearchButton = document.getElementById('newSearchButton');
+
+
+        const advancedToggle = document.getElementById('advancedToggle');
+        const advancedContent = document.getElementById('advancedContent');
+        const advancedArrow = document.getElementById('advancedArrow');
+
+
+        // Toggle advanced options
+        advancedToggle.addEventListener('click', () => {
+            advancedContent.classList.toggle('hidden');
+            advancedArrow.classList.toggle('rotate-180');
+            advancedArrow.classList.toggle('fa-chevron-down');
+            advancedArrow.classList.toggle('fa-chevron-up');
+        });
+
+
+        // Gemini API Configuration
+        const API_KEY = 'AIzaSyB8U8PwJfWl66ClinyNbS1FT2Wlfwv91hg'; // User-provided API key
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+
+        function parseGeminiResponse(rawText) {
+            const lines = rawText.split('\n').map(line => line.trim()).filter(line => line);
+            const parsedData = {
+                incidenceIndia: "Data not found or format mismatch.",
+                marketIndia: "Data not found or format mismatch.",
+                marketUS: "Data not found or format mismatch.",
+                marketEU: "Data not found or format mismatch.",
+                marketJapan: "Data not found or format mismatch.",
+                source: "Data not found or format mismatch.",
+                raw: rawText // Still store raw text in case it's needed for other logic, though not displayed
+            };
+
+
+            lines.forEach(line => {
+                const lowerLine = line.toLowerCase();
+                if (lowerLine.startsWith("incidence in india:")) {
+                    parsedData.incidenceIndia = line.substring("Incidence in India:".length).trim();
+                } else if (lowerLine.startsWith("market size in india:")) {
+                    parsedData.marketIndia = line.substring("Market Size in India:".length).trim();
+                } else if (lowerLine.startsWith("market size in us:")) {
+                    parsedData.marketUS = line.substring("Market Size in US:".length).trim();
+                } else if (lowerLine.startsWith("market size in eu:")) {
+                    parsedData.marketEU = line.substring("Market Size in EU:".length).trim();
+                } else if (lowerLine.startsWith("market size in japan:")) {
+                    parsedData.marketJapan = line.substring("Market Size in Japan:".length).trim();
+                } else if (lowerLine.startsWith("source:")) {
+                    parsedData.source = line.substring("Source:".length).trim();
+                }
+            });
+            return parsedData;
+        }
+
+
+        async function fetchDiseaseData(disease) {
+            const model = 'gemini-2.0-flash'; // Ensure this matches your actual model endpoint
+            const systemInstructionText = `
+You are a market analyst working in the healthcare sector.
+
+
+Task:
+For the disease or health problem "${disease}", provide the following information:
+- Incidence in India: [Provide the most recent available data on the number of new cases or incidence in India. If direct incidence data is not available, provide a ballpark number using available prevalence data and clearly label it as such, e.g., "Incidence in India: Approx. X% (based on prevalence, ballpark figure)"]
+- Market Size in India: [Most recent available market size data in USD. If unavailable, provide a ballpark figure and mention "(Ballpark figure)"]
+- Market Size in US: [Same as above]
+- Market Size in EU: [Same as above]
+- Market Size in Japan: [Same as above]
+- Source: [Source links from where you got the data. Should be a plain text containing links to the source, without line breaks]
+
+
+Format:
+Strictly output using this format:
+Incidence in India:
+Market Size in India:
+Market Size in US:
+Market Size in EU:
+Market Size in Japan:
+Source:
+
+
+Make sure to cite the year of the data where available.
+Explicitly note any approximate values as "(Ballpark figure)".`;
+
+
+            const requestBody = {
+                contents: [{ parts: [{ text: `Disease: ${disease}` }] }],
+                systemInstruction: { parts: [{ text: systemInstructionText }] },
+                generationConfig: {
+                    temperature: 0.3,
+                    maxOutputTokens: 1024,
+                },
+                safetySettings: [
+                    { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+                    { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+                    { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+                    { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" }
+                ],
+            };
+
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody),
+                });
+
+
+                if (!response.ok) {
+                    const errorData = await safeJsonParse(response);
+                    throw buildApiError(response, errorData, model);
+                }
+
+
+                const data = await response.json();
+                console.log("API Full Response:", data);
+
+
+                const result = extractTextFromResponse(data);
+                if (result) {
+                    return parseGeminiResponse(result);
+                }
+
+
+                throw new Error("Unexpected API response structure. No valid candidate text found.");
+            } catch (error) {
+                console.error("Error during fetchDiseaseData:", error);
+                throw error;
+            }
+        }
+
+
+        // Helper: Parse text from model response
+        function extractTextFromResponse(data) {
+            if (data.candidates && data.candidates.length > 0) {
+                const candidate = data.candidates[0];
+                const part = candidate?.content?.parts?.[0]?.text;
+                if (part) return part;
+
+
+                console.warn("Finish reason:", candidate.finishReason);
+                if (candidate.safetyRatings) {
+                    console.warn("Safety ratings:", candidate.safetyRatings);
+                }
+            } else {
+                console.warn("No candidates found in API response.");
+            }
+            return null;
+        }
+
+
+        // Helper: Safe JSON parse
+        async function safeJsonParse(response) {
+            try {
+                return await response.json();
+            } catch {
+                return {};
+            }
+        }
+
+
+        // Helper: Build descriptive API error
+        function buildApiError(response, errorData, modelName) {
+            let msg = `API request failed with status ${response.status} ${response.statusText}.`;
+            if (errorData?.error?.message) {
+                msg += ` Message: ${errorData.error.message}`;
+            } else if (Object.keys(errorData).length > 0) {
+                msg += ` Details: ${JSON.stringify(errorData, null, 2)}`;
+            }
+            msg += ` Possible cause: invalid API key or model name ('${modelName}'). Verify your configuration.`;
+            return new Error(msg);
+        }
+
+
+        searchButton.addEventListener('click', async () => {
+            const disease = diseaseInput.value.trim();
+
+
+            if (!disease) {
+                inputError.textContent = 'Please enter a disease or health problem.';
+                inputError.classList.remove('hidden');
+                return;
+            }
+            inputError.classList.add('hidden');
+
+
+            inputArea.classList.add('hidden');
+            advancedOptionsArea.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            loadingDiseaseName.textContent = disease;
+            loadingState.classList.remove('hidden');
+
+
+            try {
+                const parsedData = await fetchDiseaseData(disease);
+
+
+                loadingState.classList.add('hidden');
+
+
+                if (parsedData) {
+                    resultsDiseaseName.textContent = disease;
+                    structuredResultsDiv.innerHTML = `
+                        <p><strong class="font-semibold text-gray-700">Incidence in India:</strong> <span class="text-gray-600">${parsedData.incidenceIndia}</span></p>
+                        <p><strong class="font-semibold text-gray-700">Market Size in India:</strong> <span class="text-gray-600">${parsedData.marketIndia}</span></p>
+                        <p><strong class="font-semibold text-gray-700">Market Size in US:</strong> <span class="text-gray-600">${parsedData.marketUS}</span></p>
+                        <p><strong class="font-semibold text-gray-700">Market Size in EU:</strong> <span class="text-gray-600">${parsedData.marketEU}</span></p>
+                        <p><strong class="font-semibold text-gray-700">Market Size in Japan:</strong> <span class="text-gray-600">${parsedData.marketJapan}</span></p>
+                        <p><strong class="font-semibold text-gray-700">Source:</strong> <span class="text-gray-600" id="source-html"></span>${parsedData.source}</p>
+                    `;
+                    // Ensure rawResponseContainer remains hidden
+                    rawResponseContainer.classList.add('hidden');
+                    resultsSection.classList.remove('hidden');
+
+
+                } else {
+                    resultsDiseaseName.textContent = disease;
+                    structuredResultsDiv.innerHTML = `<p class="text-red-500 text-center">No data could be retrieved for "${disease}". The API response might have been empty or unparsable.</p>`;
+                    rawResponseContainer.classList.add('hidden'); // Ensure hidden here too
+                    resultsSection.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Error during search:", error);
+                loadingState.classList.add('hidden');
+                resultsDiseaseName.textContent = disease;
+                structuredResultsDiv.innerHTML = `<p class="text-red-600 text-center p-4 bg-red-50 rounded-md whitespace-pre-wrap"><strong>Error:</strong> ${error.message}</p>`;
+                rawResponseContainer.classList.add('hidden'); // Ensure hidden on error
+                resultsSection.classList.remove('hidden');
+            }
+        });
+
+
+        newSearchButton.addEventListener('click', () => {
+            diseaseInput.value = '';
+            resultsSection.classList.add('hidden');
+            rawResponseContainer.classList.add('hidden');
+            structuredResultsDiv.innerHTML = '';
+
+
+            inputArea.classList.remove('hidden');
+            advancedOptionsArea.classList.remove('hidden');
+
+
+            diseaseInput.focus();
+        });
+
+
+        diseaseInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchButton.click();
+            }
+        });
+    </script>
+
+
 </body>
+
+
 </html>
+
